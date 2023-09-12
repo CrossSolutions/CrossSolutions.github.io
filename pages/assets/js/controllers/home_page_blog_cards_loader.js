@@ -14,7 +14,11 @@ async function initializeAndLoadData() {
     const blogsManager = new BlogsManager(sheetsApiProvider);
 
     try {
-        await blogsManager.addBlogCardsToContainer('blogs-row', 3);
+        await blogsManager.addBlogCardsToContainer(
+            'blogs-row', 3, 0,
+            ['col-lg-4', 'col-md-6'],
+            ['mb-4', 'mb-lg-0'],
+        );
         Splash.hideSplash();
     } catch (error) {
         console.error('Error initializing and loading data:', error);

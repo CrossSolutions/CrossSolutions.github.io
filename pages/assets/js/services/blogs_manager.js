@@ -15,21 +15,15 @@ class BlogsManager {
         }
     }
 
-    #createBlogCard(blog, hasVerticalLayout) {
+    #createBlogCard(blog, outerDivClasses, innerDivClasses) {
 
         // Create the outermost container
         const containerDiv = document.createElement('div');
+        containerDiv.classList.add(...outerDivClasses);
+
         // Create the 'single-article' div
         const singleArticleDiv = document.createElement('div');
-
-        if (hasVerticalLayout) {
-            containerDiv.classList.add('col-lg-4', 'col-md-6');
-        }
-        else {
-            containerDiv.classList.add('col-lg-6', 'col-md-12');
-            singleArticleDiv.classList.add('feature-article');
-        }
-        singleArticleDiv.classList.add('single-article', 'rounded-custom', 'mb-4', 'mb-lg-0');
+        singleArticleDiv.classList.add('single-article', 'rounded-custom', ...innerDivClasses);
 
         // Create the 'a' element for the article image
         const articleImgLink = document.createElement('a');
@@ -143,12 +137,12 @@ class BlogsManager {
         return containerDiv;
     }
 
-    async addBlogCardsToContainer(containerId, count = 0, skip = 0, hasVerticalLayout = true) {
+    async addBlogCardsToContainer(containerId, count, skip, outerDivClasses, innerDivClasses) {
         try {
             const blogs = await this.#getBlogs(skip, count);
             const container = document.getElementById(containerId);
             blogs.forEach(blog => {
-                container.appendChild(this.#createBlogCard(blog, hasVerticalLayout));
+                container.appendChild(this.#createBlogCard(blog, outerDivClasses, innerDivClasses));
             });
         } catch (error) {
             console.error('Error adding blog cards:', error);
