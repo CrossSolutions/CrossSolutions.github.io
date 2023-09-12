@@ -5,27 +5,30 @@ class BlogsManager {
         this.sheetsApiProvider = sheetsApiProvider;
     }
 
-    async #getBlogs(count = 0) {
+    async #getBlogs(skip, count) {
         try {
             let blogs = await this.sheetsApiProvider.get('Blogs');
-            blogs = ArrayUtils.sortByKey(blogs, 'DatePosted', false);
-            if (count > 0) {
-                blogs = blogs.slice(0, count);
-            }
+            blogs = ArrayUtils.customSort(blogs).slice(skip, count == 0 ? blogs.length : count);
             return blogs;
         } catch (error) {
             console.error('Error getting blogs:', error);
         }
     }
 
-    #createBlogCard(blog) {
+    #createBlogCard(blog, hasVerticalLayout) {
 
         // Create the outermost container
         const containerDiv = document.createElement('div');
-        containerDiv.classList.add('col-lg-4', 'col-md-6');
-
         // Create the 'single-article' div
         const singleArticleDiv = document.createElement('div');
+
+        if (hasVerticalLayout) {
+            containerDiv.classList.add('col-lg-4', 'col-md-6');
+        }
+        else {
+            containerDiv.classList.add('col-lg-6', 'col-md-12');
+            singleArticleDiv.classList.add('feature-article');
+        }
         singleArticleDiv.classList.add('single-article', 'rounded-custom', 'mb-4', 'mb-lg-0');
 
         // Create the 'a' element for the article image
@@ -140,12 +143,12 @@ class BlogsManager {
         return containerDiv;
     }
 
-    async addBlogCardsToContainer(containerId, count = 0) {
+    async addBlogCardsToContainer(containerId, count = 0, skip = 0, hasVerticalLayout = true) {
         try {
-            const blogs = await this.#getBlogs(count);
+            const blogs = await this.#getBlogs(skip, count);
             const container = document.getElementById(containerId);
             blogs.forEach(blog => {
-                container.appendChild(this.#createBlogCard(blog));
+                container.appendChild(this.#createBlogCard(blog, hasVerticalLayout));
             });
         } catch (error) {
             console.error('Error adding blog cards:', error);

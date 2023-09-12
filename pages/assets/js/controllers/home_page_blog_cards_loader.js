@@ -15,7 +15,6 @@ async function initializeAndLoadData() {
 
     try {
         await blogsManager.addBlogCardsToContainer('blogs-row', 3);
-        // console.log("DONE")
         Splash.hideSplash();
     } catch (error) {
         console.error('Error initializing and loading data:', error);
