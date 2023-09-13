@@ -35,7 +35,10 @@ class ArrayUtils {
             const obj = {};
             row.forEach((value, index) => {
                 // Check data types and convert values accordingly
-                if (value === "TRUE" || value === "FALSE") {
+                if (headerKeys[index] === "Tags") {
+                    // Split the comma-separated string into an array of words
+                    obj[headerKeys[index]] = value.split(',').map(tag => tag.trim());
+                } else if (value === "TRUE" || value === "FALSE") {
                     obj[headerKeys[index]] = value === "TRUE"; // Convert to boolean
                 } else if (!isNaN(value) && !isNaN(parseFloat(value))) {
                     const floatValue = parseFloat(value);

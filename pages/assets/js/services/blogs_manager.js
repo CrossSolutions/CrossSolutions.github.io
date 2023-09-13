@@ -48,13 +48,16 @@ class BlogsManager {
         articleCategoryDiv.classList.add('article-category', 'mb-4', 'd-block');
 
         // Create the 'a' element for the category
-        const categoryLink = document.createElement('a');
-        categoryLink.href = 'pages/javascript:;';
-        categoryLink.classList.add('d-inline-block', 'text-warning', 'badge', 'bg-warning-soft');
-        categoryLink.textContent = blog.Tags;
+        blog.Tags.forEach(tag => {
+            const categoryLink = document.createElement('a');
+            categoryLink.href = 'pages/javascript:;';
+            categoryLink.classList.add('d-inline-block', 'text-warning', 'badge', 'bg-warning-soft', 'blog-tag');
+            categoryLink.textContent = tag;
 
-        // Append the category link to the 'article-category' div
-        articleCategoryDiv.appendChild(categoryLink);
+            // Append the category link to the 'article-category' div
+            articleCategoryDiv.appendChild(categoryLink);
+        });
+
 
         // Create the 'a' element for the article title
         const articleTitleLink = document.createElement('a');
