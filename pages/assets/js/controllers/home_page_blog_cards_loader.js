@@ -4,7 +4,6 @@ import BlogsManager from "../services/blogs_manager.js";
 import Splash from "../services/splash.js";
 
 async function initializeAndLoadData() {
-    Splash.showSplash();
     const sheetsApiProvider = new SheetsApiProvider(
         SheetsConstants.API_KEY,
         SheetsConstants.SPREADSHEET_ID,
