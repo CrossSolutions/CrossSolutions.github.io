@@ -2,11 +2,6 @@ var THEMETAGS = THEMETAGS || {};
 jQuery(function ($) {
   "use strict";
 
-  //preloader
-  $(window).ready(function () {
-    $("#preloader").delay(100).fadeOut("fade");
-  });
-
   //dropdown menu hover js
   $("ul.nav li.dropdown").hover(function () {
     $(this).find(".dropdown-menu").stop(true, true).delay(100).fadeIn(200);
