@@ -33,8 +33,8 @@ class BlogsManager {
         return inputArray;
     }
 
-    #convertBlogsArrayToObjects(dataArray) {
-        const [headerRow, ...rows] = dataArray; // Extract header row and rest of the rows
+    #convertBlogsArrayToObjects(blogsMatrix, tags) {
+        const [headerRow, ...rows] = blogsMatrix; // Extract header row and rest of the rows
         const headerKeys = headerRow.map(String); // Ensure header keys are strings
 
         const objectsArray = rows.map(row => {
@@ -42,8 +42,14 @@ class BlogsManager {
             row.forEach((value, index) => {
                 // Check data types and convert values accordingly
                 if (headerKeys[index] === "Tags") {
-                    // Split the comma-separated string into an array of words
-                    obj[headerKeys[index]] = value.split(',').map(tag => tag.trim());
+                    const tagNames = value.split(',').map(tag => tag.trim());
+
+                    obj[headerKeys[index]] = Array.from({ length: tagNames.length });
+
+                    tagNames.forEach((tagName, i) => {
+                        obj[headerKeys[index]][i] = tags.find(tag => tag.TagName == tagName);
+                    });
+
                 } else if (value === "TRUE" || value === "FALSE") {
                     obj[headerKeys[index]] = value === "TRUE"; // Convert to boolean
                 } else if (!isNaN(value) && !isNaN(parseFloat(value))) {
@@ -95,8 +101,8 @@ class BlogsManager {
         blog.Tags.forEach(tag => {
             const categoryLink = document.createElement('a');
             categoryLink.href = 'pages/javascript:;';
-            categoryLink.classList.add('d-inline-block', 'text-warning', 'badge', 'bg-warning-soft', 'blog-tag');
-            categoryLink.textContent = tag;
+            categoryLink.classList.add('d-inline-block', tag.TextStyle, 'badge', tag.BackgroundStyle, 'blog-tag');
+            categoryLink.textContent = tag.TagName;
 
             // Append the category link to the 'article-category' div
             articleCategoryDiv.appendChild(categoryLink);
@@ -187,11 +193,12 @@ class BlogsManager {
     async #getBlogs(skip, count) {
         try {
             let blogs = await this.sheetsApiProvider.get('Blogs');
-            let blogTags = await this.sheetsApiProvider.get('BlogTags');
+            let blogTags = ArrayUtils.convertArrayToObjects(await this.sheetsApiProvider.get('BlogTags'));
 
             blogs = this.#sortBlogs(
-                this.#convertBlogsArrayToObjects(blogs)
+                this.#convertBlogsArrayToObjects(blogs, blogTags)
             ).slice(skip, count == 0 ? blogs.length : count);
+
             return blogs;
         } catch (error) {
             console.error('Error getting blogs:', error);
