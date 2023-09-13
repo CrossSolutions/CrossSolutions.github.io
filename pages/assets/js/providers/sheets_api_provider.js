@@ -1,5 +1,3 @@
-import ArrayUtils from "../utilities/array_utils.js";
-
 class SheetsApiProvider {
     constructor(apiKey, spreadsheetId, discoveryDocs) {
         this.apiKey = apiKey;
@@ -29,9 +27,7 @@ class SheetsApiProvider {
                             range: range,
                         });
 
-                        const values = ArrayUtils.convertArrayToObjects(response.result.values);
-
-                        resolve(values); // Resolve the promise with the values
+                        resolve(response.result.values); // Resolve the promise with the values
                     } catch (error) {
                         console.error('Error loading data:', error);
                         reject(error); // Reject the promise with the error
