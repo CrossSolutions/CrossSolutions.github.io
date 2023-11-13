@@ -20,7 +20,7 @@ class CompaniesLogoManager {
             var logoHTML = `<ul class="brand-logo-grid list-unstyled">`;
             logos.forEach(logo => {
                 logoHTML += `<li class="bg-white">
-                            <img src="${logo}" alt="brand logo" stlyle='height:140px'/>
+                            <img src="${logo}" alt="brand logo" stlyle="height:140px"/>
                             </li>`;
             });
             logoHTML += '</ul>';
